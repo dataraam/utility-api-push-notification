@@ -57,8 +57,8 @@ public class PushServiceImpl implements PushService {
 		Response response = webTarget.request().headers(headersMap).
 				post(Entity.json(pushNotificationRequest));
 		System.out.println("Push Notification Successfully Triggred with data " + request.toString() + "with response " +
-				response.getStatus());		
-		
+				response.getStatus());	
+			
 	}
 	
 	public MultivaluedHashMap<String, Object> getHeaders(HttpServletRequest httpServletRequest){

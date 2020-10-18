@@ -36,6 +36,18 @@ public class UtilityAppController {
 		if(Optional.ofNullable(deviceToken).isPresent()) {
 			confirmPaymentRequest.setDeviceId(deviceToken);
 		this.notificationDataOrchestrator.getPaymentsRequest(confirmPaymentRequest, request);
+		
+		BalanceUpdate balanceUpdateRequest = new BalanceUpdate();
+		balanceUpdateRequest.setBenfAccountNumber(confirmPaymentRequest.getToAccountNumber());
+		balanceUpdateRequest.setBenfName(confirmPaymentRequest.getBenfName());
+		balanceUpdateRequest.setUpdatedBalance(confirmPaymentRequest.getAmount());
+		balanceUpdateRequest.setCurrency(confirmPaymentRequest.getCurrency());
+		balanceUpdateRequest.setCustId(confirmPaymentRequest.getCustId());
+		balanceUpdateRequest.setDeviceId(confirmPaymentRequest.getDeviceId());
+		
+		this.notificationDataOrchestrator.updateBalance(balanceUpdateRequest, request);
+		
+		
 			message = "Payment Success";
 		}
 		else
