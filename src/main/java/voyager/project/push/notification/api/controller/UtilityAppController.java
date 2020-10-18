@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import voyager.project.push.notification.api.model.AddIndividual;
+import voyager.project.push.notification.api.model.BalanceUpdate;
 import voyager.project.push.notification.api.model.ConfirmPaymentRequest;
 import voyager.project.push.notification.api.orchestrator.NotificationDataOrchestrator;
 
@@ -43,7 +45,59 @@ public class UtilityAppController {
 		}
 		return message;
 	}
+	
+	@RequestMapping(method = RequestMethod.POST, value ="/add-individual")
+	public String addIndividual(@RequestHeader("X-Device-Token") String deviceToken,
+			@Valid @RequestBody AddIndividual addIndividualRequest, HttpServletRequest request) throws Exception {
+		String message ="";
+		if(Optional.ofNullable(deviceToken).isPresent()) {
+			addIndividualRequest.setDeviceId(deviceToken);
+		this.notificationDataOrchestrator.addIndividual(addIndividualRequest, request);
+			message = "Payee has been successfully added";
+		}
+		else
+		{
+			message = "Token Not found";
+			throw new Exception("Required Token Not found");
+		}
+		return message;
+	}
 
+	@RequestMapping(method = RequestMethod.POST, value ="/balance-update")
+	public String balanceUpdated(@RequestHeader("X-Device-Token") String deviceToken,
+			@Valid @RequestBody BalanceUpdate balanceUpdateRequest, HttpServletRequest request) throws Exception {
+		String message ="";
+		if(Optional.ofNullable(deviceToken).isPresent()) {
+			balanceUpdateRequest.setDeviceId(deviceToken);
+		this.notificationDataOrchestrator.updateBalance(balanceUpdateRequest, request);
+			message = "Balance has been successfully updated";
+		}
+		else
+		{
+			message = "Token Not found";
+			throw new Exception("Required Token Not found");
+		}
+		return message;
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value ="/personal-details-update")
+	public String personalDetailssUpdated(@RequestHeader("X-Device-Token") String deviceToken,
+			@Valid @RequestBody BalanceUpdate balanceUpdateRequest, HttpServletRequest request) throws Exception {
+		String message ="";
+		if(Optional.ofNullable(deviceToken).isPresent()) {
+			balanceUpdateRequest.setDeviceId(deviceToken);
+		this.notificationDataOrchestrator.updateBalance(balanceUpdateRequest, request);
+			message = "Details has been successfully updated";
+		}
+		else
+		{
+			message = "Token Not found";
+			throw new Exception("Required Token Not found");
+		}
+		return message;
+	}
+	
+	
 	@Autowired
 	public void setNotificationDataOrchestrator(NotificationDataOrchestrator notificationDataOrchestrator) {
 		this.notificationDataOrchestrator = notificationDataOrchestrator;
