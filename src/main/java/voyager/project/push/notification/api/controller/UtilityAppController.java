@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import voyager.project.push.notification.api.model.AddIndividual;
 import voyager.project.push.notification.api.model.BalanceUpdate;
 import voyager.project.push.notification.api.model.ConfirmPaymentRequest;
+import voyager.project.push.notification.api.model.PersonalDetails;
 import voyager.project.push.notification.api.orchestrator.NotificationDataOrchestrator;
 
 @RestController
@@ -94,11 +95,11 @@ public class UtilityAppController {
 
 	@RequestMapping(method = RequestMethod.POST, value ="/personal-details-update")
 	public String personalDetailssUpdated(@RequestHeader("X-Device-Token") String deviceToken,
-			@Valid @RequestBody BalanceUpdate balanceUpdateRequest, HttpServletRequest request) throws Exception {
+			@Valid @RequestBody PersonalDetails personalDetailsRequest, HttpServletRequest request) throws Exception {
 		String message ="";
 		if(Optional.ofNullable(deviceToken).isPresent()) {
-			balanceUpdateRequest.setDeviceId(deviceToken);
-		this.notificationDataOrchestrator.updateBalance(balanceUpdateRequest, request);
+			personalDetailsRequest.setDeviceId(deviceToken);
+		this.notificationDataOrchestrator.updatePersonalDetails(personalDetailsRequest, request);
 			message = "Details has been successfully updated";
 		}
 		else
